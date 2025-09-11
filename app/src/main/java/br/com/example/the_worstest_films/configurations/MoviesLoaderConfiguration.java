@@ -1,7 +1,7 @@
 package br.com.example.the_worstest_films.configurations;
 
-import br.com.example.the_worstest_films.adapters.output.repositories.MovieRepository;
 import br.com.example.the_worstest_films.models.entities.Movie;
+import br.com.example.the_worstest_films.ports.output.MovieRepository;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -43,7 +43,7 @@ public class MoviesLoaderConfiguration {
                             record.get("studios"),
                             record.get("producers"),
                             Integer.parseInt(record.get("year")),
-                            Boolean.parseBoolean(record.get("winner")));
+                            "yes".equalsIgnoreCase(record.get("winner")));
 
                     movieRepository.save(movie);
                 }
