@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface MovieRepositoryImpl extends MovieRepository, JpaRepository<Movie, Long> {
 
-    List<Movie> findByProducerContainingOrderByMovieYear(String producer);
+    List<Movie> findByWinnerTrueAndProducerContainingOrderByMovieYear(String producer);
 
     @Query(value = " SELECT DISTINCT m.producer FROM Movie m WHERE m.winner = true ORDER BY 1")
     List<String> findWinnersProducers();

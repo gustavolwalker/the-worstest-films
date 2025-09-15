@@ -8,7 +8,7 @@ public interface MovieRepository {
 
     Movie save(Movie entity);
 
-    List<Movie> findByProducerContainingOrderByMovieYear(String producer);
+    List<Movie> findByWinnerTrueAndProducerContainingOrderByMovieYear(String producer);
 
     List<String> findWinnersProducers();
 }
