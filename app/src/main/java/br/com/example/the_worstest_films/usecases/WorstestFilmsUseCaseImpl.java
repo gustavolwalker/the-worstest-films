@@ -33,7 +33,7 @@ public class WorstestFilmsUseCaseImpl implements WorstestFilmsUseCase {
         Integer minInterval = null, maxInterval = null;
 
         log.info("getting producers...");
-        List<String> producers = getProducers();
+        List<String> producers = getWinnersProducers();
         if (producers.isEmpty())
             return new WorstestFilmsProducersDTO(null, null);
 
@@ -70,12 +70,12 @@ public class WorstestFilmsUseCaseImpl implements WorstestFilmsUseCase {
      *
      * @return Uma lista de nomes de produtores distintos.
      */
-    private List<String> getProducers() {
+    private List<String> getWinnersProducers() {
 
         //Esse código poderia ser reduzido/suprimido com um banco de dados mais robusto
         List<String> splitedProducers = new ArrayList<>();
         movieRepository.findWinnersProducers().forEach(p ->
-                splitedProducers.addAll(List.of(p.split(", | and ")))
+                splitedProducers.addAll(List.of(p.split(", | and |, and ")))
         );
         List<String> distinctProducers = splitedProducers.stream().distinct().toList();
 
