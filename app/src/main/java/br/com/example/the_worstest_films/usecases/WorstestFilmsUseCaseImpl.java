@@ -33,14 +33,14 @@ public class WorstestFilmsUseCaseImpl implements WorstestFilmsUseCase {
         Integer minInterval = null, maxInterval = null;
 
         log.info("getting producers...");
-        List<String> producers = getProducers();
+        List<String> producers = getWinnersProducers();
         if (producers.isEmpty())
             return new WorstestFilmsProducersDTO(null, null);
 
         for (String pr : producers) {
 
             log.info("getting movies by producer: {} ", pr);
-            var producerDTO = getMovieIntervalByProducer(pr);
+            var producerDTO = getMovieIntervalByWinnerProducer(pr);
             if (producerDTO == null)
                 continue;
 
@@ -70,12 +70,12 @@ public class WorstestFilmsUseCaseImpl implements WorstestFilmsUseCase {
      *
      * @return Uma lista de nomes de produtores distintos.
      */
-    private List<String> getProducers() {
+    private List<String> getWinnersProducers() {
 
         //Esse código poderia ser reduzido/suprimido com um banco de dados mais robusto
         List<String> splitedProducers = new ArrayList<>();
         movieRepository.findWinnersProducers().forEach(p ->
-                splitedProducers.addAll(List.of(p.split(", | and ")))
+                splitedProducers.addAll(List.of(p.split(", | and |, and ")))
         );
         List<String> distinctProducers = splitedProducers.stream().distinct().toList();
 
@@ -84,16 +84,15 @@ public class WorstestFilmsUseCaseImpl implements WorstestFilmsUseCase {
         return distinctProducers;
     }
 
-
     /**
-     * Método para obter o intervalo entre prêmios de um produtor específico.
+     * Método para obter o intervalo entre prêmios de um produtor premiado específico.
      *
      * @param producer O nome do produtor.
      * @return Um objeto ProducerDTO contendo o nome do produtor, intervalo entre prêmios, ano do prêmio anterior e ano do prêmio seguinte.
      */
-    private ProducerDTO getMovieIntervalByProducer(String producer) {
+    private ProducerDTO getMovieIntervalByWinnerProducer(String producer) {
 
-        List<Movie> movies = movieRepository.findByProducerContainingOrderByMovieYear(producer);
+        List<Movie> movies = movieRepository.findByWinnerTrueAndProducerContainingOrderByMovieYear(producer);
         if (movies.isEmpty() || movies.size() == 1)
             return null;
 
